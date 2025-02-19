@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geologica", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --breakpoint-2xl: 109.5rem;
+
+  --color-gray: #e8e8e8;
+  --color-gray-accent: #a2a2a2;
+  --color-gray-focus: #d4d3d3;
+}
+
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --radius-field: 1.5rem;
+
+  --color-primary: #53dd6c;
+  --color-primary-content: #fff;
+  --color-base-content: #161616;
+}

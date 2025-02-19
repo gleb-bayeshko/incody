@@ -1,0 +1,59 @@
+/* Inputs */
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+input:placeholder-shown {
+  text-overflow: ellipsis;
+}
+
+.input {
+  border-color: var(--color-gray);
+}
+
+.input:focus,
+.input:focus-within {
+  border-color: var(--color-gray-focus);
+  box-shadow: none;
+}
+
+/* Buttons */
+
+.btn:not(.btn-outline) {
+  box-shadow: none;
+  text-shadow: none;
+  border: none;
+  translate: none;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.btn:active:not(.btn-outline) {
+  box-shadow: none;
+  text-shadow: none;
+  border: none;
+  translate: none;
+}
+
+.btn-outline {
+  translate: none;
+  height: 48px;
+  border-color: var(--color-gray);
+}
+
+.btn-outline:hover {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--color-primary);
+}
+
+.btn-outline-active {
+  border-color: var(--color-primary);
+}
+
+.btn-md {
+  height: 3rem;
+}
