@@ -7,32 +7,30 @@ import type { InitialData } from "./types";
 import ProductCard from "~/components/widgets/ProductCard";
 import AboutUs from "~/components/widgets/AboutUs";
 import type { Route } from "./+types";
+import Meta from "~/components/widgets/Meta";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Incody" },
-    { name: "description", content: "Главная страница" },
-  ];
-}
+declare const window: {
+  __INITIAL_DATA__: InitialData;
+} & Window;
 
 export default function Home() {
-  const [data, setData] = useState<InitialData>({});
+  const [data, setData] = useState<InitialData>(window.__INITIAL_DATA__);
 
   useEffect(() => {
-    if (import.meta.env.MODE === "development") {
-      window.__INITIAL_DATA__ = initialData;
-    }
-
-    window.__INITIAL_DATA__ = initialData;
-
     setData(window.__INITIAL_DATA__);
   }, []);
 
   return (
     <Wrapper>
+      <Meta
+        title={`Incody`}
+        description={`Incody представляет собой крупную торговую площадку с трафиком более 2 млн визитов в месяц, которая специализируется на продаже игр, программного обеспечения, внутриигровых предметов, различных подписок и услуг. У нас собрано множество товаров от проверенных продавцов со всего мира. Мы стремимся обеспечить нашим клиентам легкий доступ к продуктам и услугам, чтобы сделать их жизнь более удобной.`}
+        ogTitle={`Incody`}
+        ogDescription={`Incody представляет собой крупную торговую площадку с трафиком более 2 млн визитов в месяц, которая специализируется на продаже игр, программного обеспечения, внутриигровых предметов, различных подписок и услуг. У нас собрано множество товаров от проверенных продавцов со всего мира. Мы стремимся обеспечить нашим клиентам легкий доступ к продуктам и услугам, чтобы сделать их жизнь более удобной.`}
+      />
       <section>
         <h2 className="">Сервисы</h2>
-        <Categories className="my-6" onChange={(id) => console.log(id)}>
+        <Categories className="my-6" onChange={(id) => {}}>
           {data?.categories?.map(({ id, name }) => (
             <Category id={id} key={id}>
               {name}

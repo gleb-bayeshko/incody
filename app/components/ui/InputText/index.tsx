@@ -7,6 +7,7 @@ interface InputTextProps
   inputClassName?: string;
   iconLeft?: React.ReactElement;
   iconRight?: React.ReactElement;
+  ref: React.Ref<HTMLInputElement>;
 }
 
 function InputText({
@@ -14,6 +15,7 @@ function InputText({
   inputClassName = "",
   iconLeft: IconLeft,
   iconRight: IconRight,
+  ref,
   ...rest
 }: InputTextProps) {
   return (
@@ -24,6 +26,7 @@ function InputText({
     >
       {IconLeft}
       <input
+        ref={ref}
         className={classNames("grow font-light text-base", {
           [inputClassName]: !!inputClassName,
         })}

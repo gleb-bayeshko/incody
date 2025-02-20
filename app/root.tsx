@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -14,6 +15,9 @@ import "./assets/styles/index.css";
 import Navbar from "./components/widgets/Navbar";
 import Footer from "./components/widgets/Footer";
 import Wrapper from "./components/ui/Wrapper";
+import { useEffect } from "react";
+import { productData } from "./utils/mock/productData";
+import { initialData } from "./utils/mock/initialData";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -28,7 +32,17 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children, ...rest }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isDev = import.meta.env.MODE === "development";
+
+  useEffect(() => {
+    if (isDev) {
+      // @ts-ignore
+      window.__INITIAL_DATA__ = getData(location.pathname);
+    }
+  }, [location]);
+
   return (
     <html lang="ru">
       <head>
@@ -85,4 +99,16 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       </div>
     </main>
   );
+}
+
+function getData(pathname: string = "") {
+  let data = {};
+
+  if (pathname === "/") {
+    data = initialData;
+  } else if (pathname.startsWith("/product/")) {
+    data = productData;
+  }
+
+  return data;
 }

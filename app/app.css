@@ -8,6 +8,10 @@
   --color-gray: #e8e8e8;
   --color-gray-accent: #a2a2a2;
   --color-gray-focus: #d4d3d3;
+  --color-orange: #f7ce5b;
+
+  --color-rating-check: #f7ce5b;
+  --color-rating-uncheck: #e8e8e8;
 }
 
 @plugin "daisyui" {

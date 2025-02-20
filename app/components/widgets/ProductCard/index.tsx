@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { Link } from "react-router";
+import getImageUrl from "~/utils/helpers/getImageUrl";
 import type { ClassNameProp } from "~/utils/types";
 
 interface ProductCard extends ClassNameProp {
@@ -16,6 +17,9 @@ function ProductCard({
   shortName,
   className,
 }: ProductCard) {
+  const imageUrl = getImageUrl(image);
+  const productLink = `product/${shortName}`;
+
   return (
     <div
       className={classNames(
@@ -26,15 +30,15 @@ function ProductCard({
       {/* Mobile */}
       <div className="block sm:hidden">
         <div className="flex gap-x-3">
-          <Link to={`/${shortName}`}>
+          <Link to={productLink}>
             <img
-              src={image}
+              src={imageUrl}
               className="aspect-square object-cover object-center rounded-xl max-w-22"
               alt={shortName}
             />
           </Link>
           <div className="flex flex-col justify-between">
-            <Link to={`/${shortName}`}>
+            <Link to={productLink}>
               <p className="text-base font-light hover:underline line-clamp-2">
                 {title}
               </p>
@@ -49,14 +53,17 @@ function ProductCard({
 
       {/* Desktop */}
       <div className="sm:flex-col hidden sm:flex">
-        <Link to={`/${shortName}`}>
+        <Link
+          to={productLink}
+          className="rounded-xl overflow-hidden hover:[&>img]:scale-110"
+        >
           <img
-            src={image}
-            className="aspect-square object-cover object-center rounded-xl"
+            src={imageUrl}
+            className="aspect-square object-cover object-center duration-100"
             alt={shortName}
           />
         </Link>
-        <Link to={`/${shortName}`}>
+        <Link to={productLink}>
           <p className="text-base font-light hover:underline mt-6 mb-3 line-clamp-3">
             {title}
           </p>
