@@ -20,10 +20,6 @@ npm run start
 
 ### Docker Deployment
 
-This template includes three Dockerfiles optimized for different package managers:
-
-- `Dockerfile`
-
 Сборка и запуск, используя Docker:
 
 ```bash
