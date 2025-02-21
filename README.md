@@ -22,3 +22,8 @@ npm run dev
 ```bash
 npm run build
 ```
+
+### Билд
+
+Итоговый билд будет находится в папке build/client
+
