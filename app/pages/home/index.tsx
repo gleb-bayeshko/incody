@@ -62,8 +62,6 @@ export default function Home() {
   useEffect(() => {
     setData(window.__INITIAL_DATA__);
     setProductsData(window.__INITIAL_DATA__?.products || []);
-    console.log(window);
-    console.log(__INITIAL_DATA__);
   }, []);
 
   useEffect(() => {
