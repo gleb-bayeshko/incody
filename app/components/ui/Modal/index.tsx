@@ -23,7 +23,7 @@ function Modal({ isOpen, onClose, id, children }: ModalProps) {
 
   return (
     <dialog id={id} className="modal" ref={modalRef}>
-      <div className="modal-box rounded-none sm:rounded-3xl p-6 w-full max-w-full sm:max-w-[32rem] max-h-[100%] sm:max-h-[80%]">
+      <div className="modal-box rounded-none sm:rounded-3xl p-6 w-full max-w-full sm:max-w-[32rem] max-h-[100%] sm:max-h-[80%] overflow-hidden height-[-webkit-fill-available]">
         {children}
       </div>
       <form

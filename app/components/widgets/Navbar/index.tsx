@@ -26,7 +26,9 @@ function Navbar() {
   };
 
   useEffect(() => {
-    searchInputRef.current?.focus();
+    if (window.innerWidth <= 640) {
+      searchInputRef.current?.focus();
+    }
   }, [isSearchVisible]);
 
   useEffect(() => {

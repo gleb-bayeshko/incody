@@ -56,7 +56,7 @@ function ReviewsModal({
   return (
     <Modal id={id} isOpen={isOpen} onClose={handleClose}>
       {step === 0 && (
-        <div className="">
+        <>
           <div className="flex items-center justify-between pb-6 border-b-[1px] border-gray">
             <div className="text-2xl font-bold">Отзывы</div>
             <div className="flex items-center">
@@ -74,7 +74,7 @@ function ReviewsModal({
               </button>
             </div>
           </div>
-          <div className="pt-6 [&>div:not(:first-child)]:mt-6 h-[calc(100%-72px)] scrollbar">
+          <div className="pt-6 [&>div:not(:first-child)]:mt-6 scrollbar max-h-[670px] sm:max-h-[500px] h-full overflow-y-auto">
             {reviewsData.map(({ id, rating, name, text }) => (
               <div key={id}>
                 <Rating rating={rating} />
@@ -83,7 +83,7 @@ function ReviewsModal({
               </div>
             ))}
           </div>
-        </div>
+        </>
       )}
       {step === 1 && (
         <form onSubmit={handleFormSubmit}>
