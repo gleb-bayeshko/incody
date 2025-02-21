@@ -5,22 +5,51 @@ import type { Offer, Product, ProductData } from "./types";
 import getImageUrl from "~/utils/helpers/getImageUrl";
 import Wrapper from "~/components/ui/Wrapper";
 import ArrowLeft from "~/components/icons/ArrorLeft";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Rating from "~/components/ui/Rating";
 import createWordPluralizer from "~/utils/helpers/createWordPluralizer";
 import Offers from "~/components/widgets/Offers/Offers";
 import InputText from "~/components/ui/InputText";
 import Meta from "~/components/widgets/Meta";
+import ReviewsModal from "~/components/modals/ReviewsModal";
+import BreadcrumbBack from "~/components/ui/BreadcrumbBack";
+import { useQuery } from "@tanstack/react-query";
+import productApi from "~/api/productApi";
+import { set, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 declare const window: {
   __INITIAL_DATA__: ProductData;
 } & Window;
+
+type Inputs = {
+  emailForProductBuy: string;
+};
 
 export default function Product() {
   const [data, setData] = useState<ProductData>(window.__INITIAL_DATA__);
   const [currentOfferId, setCurrentOfferId] = useState<number | undefined>(
     data?.offers?.[0]?.id
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormLoading, setIsFormLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { data: reviewsData } = useQuery({
+    queryKey: ["productsReviews", data.product?.short_name],
+    queryFn: () => {
+      return productApi.getProductsReviews(data.product?.short_name || "");
+    },
+    enabled: !!data.product?.short_name,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Inputs>();
 
   const ratingPluralizer = createWordPluralizer("оцен", {
     one: "ка",
@@ -30,6 +59,31 @@ export default function Product() {
 
   const handleOfferChange = (id: number) => {
     setCurrentOfferId(id);
+  };
+
+  const handleReviewsClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleReviewsModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleFormSubmit = async (data: Inputs) => {
+    setIsFormLoading(true);
+
+    if (!currentOfferId) return;
+
+    await productApi
+      .postProductTransaction(data.emailForProductBuy, currentOfferId)
+      .catch(() => {
+        toast.error("Произошла ошибка");
+      })
+      .finally(() => {
+        setIsFormLoading(false);
+      });
+
+      navigate('/merchant')
   };
 
   useEffect(() => {
@@ -46,13 +100,7 @@ export default function Product() {
         ogDescription={`${data.product?.description}`}
         ogImageUrl={`${getImageUrl(data.product?.image)}`}
       />
-      <Link
-        to="/"
-        className="mb-6 flex items-center hover:contrast-20 duration-100"
-      >
-        <ArrowLeft className="mr-3" />
-        <div className="text-gray-accent text-base font-light">На главную</div>
-      </Link>
+      <BreadcrumbBack link="/" text="На главную" className="mb-6" />
       <section className="flex gap-x-6">
         <div className="w-[264px] hidden md:block">
           <img
@@ -69,7 +117,10 @@ export default function Product() {
               />
             </div>
             <div>
-              <div className="flex items-center cursor-pointer hover:[&>span]:underline flex-nowrap w-min">
+              <div
+                className="flex items-center cursor-pointer hover:[&>span]:underline flex-nowrap w-min"
+                onClick={handleReviewsClick}
+              >
                 <Rating rating={data?.product?.rating} />
                 <span className="block text-nowrap ml-3 text-primary font-light text-base">{`${
                   data.product?.rating_amount
@@ -81,7 +132,7 @@ export default function Product() {
             </div>
           </div>
           <div className="grid xl:grid-cols-[692px_auto] gap-x-0 mt-6">
-            <div className="xl:pr-6">
+            <form className="xl:pr-6" onSubmit={handleSubmit(handleFormSubmit)}>
               <p className="font-light text-base">
                 {data.product?.description}
               </p>
@@ -94,11 +145,26 @@ export default function Product() {
               <InputText
                 labelClassName="mt-3 w-full"
                 placeholder="E-mail для передачи доступа"
+                {...register("emailForProductBuy", {
+                  required: "Введите e-mail для передачи доступа",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Введите валидный email",
+                  },
+                })}
               />
-              <button className="btn btn-md btn-primary w-full mt-3">{`Купить навсегда за ${
+              {errors.emailForProductBuy && (
+                <div className="text-red-500 mt-3 md:ml-6 font-light text-center md:text-start">
+                  {errors.emailForProductBuy.message}
+                </div>
+              )}
+              <button
+                disabled={isFormLoading}
+                className="btn btn-md btn-primary w-full mt-3"
+              >{`Купить навсегда за ${
                 data.offers?.find(({ id }) => id === currentOfferId)?.price
               }  ₽`}</button>
-            </div>
+            </form>
             <div className="border-t-[1px] pt-6 mt-6 xl:mt-0 xl:border-t-0 xl:pt-0 xl:pl-6 xl:border-l-[1px] border-gray">
               <div
                 dangerouslySetInnerHTML={{
@@ -111,6 +177,13 @@ export default function Product() {
         </div>
       </section>
       <script type="application/ld+json">{JSON.stringify(getLD(data))}</script>
+      <ReviewsModal
+        isOpen={isModalOpen}
+        id="product-reviews-modal"
+        onClose={handleReviewsModalClose}
+        shortName={data.product?.short_name}
+        reviewsData={reviewsData || []}
+      />
     </Wrapper>
   );
 }

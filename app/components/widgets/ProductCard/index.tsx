@@ -18,7 +18,7 @@ function ProductCard({
   className,
 }: ProductCard) {
   const imageUrl = getImageUrl(image);
-  const productLink = `product/${shortName}`;
+  const productLink = `/product/${shortName}`;
 
   return (
     <div
@@ -47,9 +47,9 @@ function ProductCard({
           </div>
         </div>
       </div>
-      <button className="block mt-3 sm:hidden btn btn-md btn-primary btn-block">
-        Купить
-      </button>
+      <Link to={productLink} className="block mt-3 sm:hidden">
+        <button className="btn btn-md btn-primary btn-block">Купить</button>
+      </Link>
 
       {/* Desktop */}
       <div className="sm:flex-col hidden sm:flex">
@@ -63,7 +63,7 @@ function ProductCard({
             alt={shortName}
           />
         </Link>
-        <Link to={productLink}>
+        <Link to={productLink} relative="path">
           <p className="text-base font-light hover:underline mt-6 mb-3 line-clamp-3">
             {title}
           </p>
@@ -71,7 +71,9 @@ function ProductCard({
       </div>
       <div className="hidden sm:block">
         <div className="font-bold text-xl mb-6">{priceText}</div>
-        <button className="btn btn-md btn-primary btn-block">Купить</button>
+        <Link to={productLink}>
+          <button className="btn btn-md btn-primary btn-block">Купить</button>
+        </Link>
       </div>
     </div>
   );

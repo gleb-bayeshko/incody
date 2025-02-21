@@ -17,11 +17,9 @@ function Footer() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(window.__INITIAL_DATA__);
     if (location.pathname === "/") {
       setData((window.__INITIAL_DATA__ as InitialData).contacts);
     } else {
-      console.log(window.__INITIAL_DATA__);
       setData({
         support_button: (window.__INITIAL_DATA__ as ProductData).support_button,
       });
@@ -82,15 +80,27 @@ function Footer() {
             </button>
           </a>
         </div>
-        <div className="flex xl:items-center flex-col lg:flex-row lg:mt-3 xl:mt-0 lg:justify-center xl:justify-start">
-          <a
-            className="font-light text-base text-gray-accent mb-6 lg:mb-0 lg:mr-6"
-            href="/"
-            target="_blank"
-          >
-            Политика конфиденциальности
-          </a>
-          <span className="font-light text-base text-gray-accent">
+        <div className="flex flex-col xl:items-end mt-0 lg:mt-6 xl:mt-0">
+          <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row 2xl:items-center gap-x-5">
+            <a
+              className="font-light text-base text-gray-accent text-nowrap sm:text-end hover:underline"
+              href="/oferta"
+              target="_blank"
+            >
+              Пользовательское соглашение
+            </a>
+            <a
+              className="font-light text-base text-gray-accent text-nowrap sm:text-end hover:underline"
+              href="/policy"
+              target="_blank"
+            >
+              Политика конфиденциальности
+            </a>
+            <span className="hidden xl:flex font-light text-base text-gray-accent justify-end text-end mt-2 lg:mt-0">
+              © Incody.io, 2025
+            </span>
+          </div>
+          <span className="flex xl:hidden font-light text-base text-gray-accent justify-start text-start mt-6">
             © Incody.io, 2025
           </span>
         </div>

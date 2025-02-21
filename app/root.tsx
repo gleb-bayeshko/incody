@@ -18,6 +18,9 @@ import Wrapper from "./components/ui/Wrapper";
 import { useEffect } from "react";
 import { productData } from "./utils/mock/productData";
 import { initialData } from "./utils/mock/initialData";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { successData } from "./utils/mock/successData";
+import { failData } from "./utils/mock/failData";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,6 +34,8 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap",
   },
 ];
+
+export const queryClient = new QueryClient();
 
 export function Layout({ children, ...rest }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -52,7 +57,9 @@ export function Layout({ children, ...rest }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -108,6 +115,10 @@ function getData(pathname: string = "") {
     data = initialData;
   } else if (pathname.startsWith("/product/")) {
     data = productData;
+  } else if (pathname === "/pay/success") {
+    data = successData;
+  } else if (pathname === "/pay/fail") {
+    data = failData;
   }
 
   return data;

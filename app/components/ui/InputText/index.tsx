@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import type { ComponentType, InputHTMLAttributes } from "react";
+import type { InputHTMLAttributes } from "react";
 
 interface InputTextProps
   extends Partial<InputHTMLAttributes<HTMLInputElement>> {
@@ -7,7 +7,7 @@ interface InputTextProps
   inputClassName?: string;
   iconLeft?: React.ReactElement;
   iconRight?: React.ReactElement;
-  ref: React.Ref<HTMLInputElement>;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 function InputText({

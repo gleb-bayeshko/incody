@@ -26,3 +26,12 @@ export interface Product {
   instruction?: string;
   sort?: number;
 }
+
+export interface ProductReview {
+  id: number;
+  product_id: number;
+  rating: number;
+  name?: string;
+  text?: string;
+  created_at?: Date;
+}

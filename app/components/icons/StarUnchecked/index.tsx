@@ -8,6 +8,7 @@ function StarUnchecked({ className }: ClassNameProp) {
       height="20"
       fill="none"
       viewBox="0 0 20 20"
+      className={className}
     >
       <path
         fill="#E8E8E8"

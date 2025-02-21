@@ -46,6 +46,7 @@ function Offers({ offers, onChange, selectedOfferId, className }: OffersProps) {
               }
             )}
             onClick={() => handleClick(id)}
+            type="button"
           >
             <div className="flex items-center">
               <CheckIcon
