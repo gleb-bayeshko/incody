@@ -13,18 +13,26 @@ declare const window: {
 } & Window;
 
 function Footer() {
+  const [initialData, setInitialData] = useState<InitialData | ProductData>({});
   const [data, setData] = useState<ContactsType>({});
   const location = useLocation();
 
   useEffect(() => {
+    if (!initialData) return;
+
     if (location.pathname === "/") {
-      setData((window.__INITIAL_DATA__ as InitialData).contacts);
+      setData((window.__INITIAL_DATA__ as InitialData)?.contacts);
     } else {
       setData({
-        support_button: (window.__INITIAL_DATA__ as ProductData).support_button,
+        support_button: (window.__INITIAL_DATA__ as ProductData)
+          ?.support_button,
       });
     }
-  }, [location, window.__INITIAL_DATA__]);
+  }, [location, initialData]);
+
+  useEffect(() => {
+    setInitialData(window.__INITIAL_DATA__);
+  }, []);
 
   return (
     <footer className="border-t-[1px] border-gray">

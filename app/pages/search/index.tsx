@@ -39,7 +39,7 @@ export default function Search() {
         <BreadcrumbBack text="Назад" className="mb-6" />
         <h2 className="mb-6">Результаты поиска</h2>
         {!isProductsDataPending &&
-          (productsData?.length > 0 ? (
+          ((productsData || [])?.length > 0 ? (
             <div className="border-b-[1px] border-gray pb-6 mb-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
                 {productsData?.map(

@@ -16,7 +16,7 @@ declare const window: {
 } & Window;
 
 export default function Home() {
-  const [data, setData] = useState<InitialData>(window.__INITIAL_DATA__);
+  const [data, setData] = useState<InitialData>({});
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [isMoreButtonVisible, setIsMoreButtonVisible] = useState(true);
   const [currentCategoryId, setCurrentCategoryId] = useState<
@@ -61,7 +61,9 @@ export default function Home() {
 
   useEffect(() => {
     setData(window.__INITIAL_DATA__);
-    setProductsData(window.__INITIAL_DATA__.products || []);
+    setProductsData(window.__INITIAL_DATA__?.products || []);
+    console.log(window);
+    console.log(__INITIAL_DATA__);
   }, []);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function Home() {
     }
 
     if (!currentCategoryId) {
-      setProductsData(window.__INITIAL_DATA__.products || []);
+      setProductsData(window.__INITIAL_DATA__?.products || []);
       setIsMoreButtonVisible(true);
     }
   }, [
@@ -147,7 +149,7 @@ export default function Home() {
           )}
         </div>
       </section>
-      <AboutUs description={data.about?.description} />
+      <AboutUs description={data?.about?.description} />
     </Wrapper>
   );
 }

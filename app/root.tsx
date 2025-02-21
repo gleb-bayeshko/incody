@@ -38,16 +38,6 @@ export const links: Route.LinksFunction = () => [
 export const queryClient = new QueryClient();
 
 export function Layout({ children, ...rest }: { children: React.ReactNode }) {
-  const location = useLocation();
-  const isDev = import.meta.env.MODE === "development";
-
-  useEffect(() => {
-    if (isDev) {
-      // @ts-ignore
-      window.__INITIAL_DATA__ = getData(location.pathname);
-    }
-  }, [location]);
-
   return (
     <html lang="ru">
       <head>
@@ -92,7 +82,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <Wrapper>
           <div className="flex justify-center items-center h-full">
             <div>
-              <h1 className="text-[100px] text-center">{message}</h1>
+              <h1 className="text-[50px] text-center">{message}</h1>
               <p className="text-center">{details}</p>
               <Link to="/" className="flex justify-center">
                 <button className="btn btn-outline mt-6">
@@ -106,20 +96,4 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       </div>
     </main>
   );
-}
-
-function getData(pathname: string = "") {
-  let data = {};
-
-  if (pathname === "/") {
-    data = initialData;
-  } else if (pathname.startsWith("/product/")) {
-    data = productData;
-  } else if (pathname === "/pay/success") {
-    data = successData;
-  } else if (pathname === "/pay/fail") {
-    data = failData;
-  }
-
-  return data;
 }

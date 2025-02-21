@@ -12,11 +12,11 @@ declare const window: {
 } & Window;
 
 export default function Success() {
-  const [data, setData] = useState<SuccessData>(window.__INITIAL_DATA__);
+  const [data, setData] = useState<SuccessData>({});
 
   const handleCopyClick = () => {
-    if (!data.key) return;
-    navigator.clipboard.writeText(data.key);
+    if (!data?.key) return;
+    navigator.clipboard.writeText(data?.key);
     toast.success("Ключ скопирован");
   };
 
@@ -24,7 +24,7 @@ export default function Success() {
     setData(window.__INITIAL_DATA__);
   }, []);
 
-  if (!data.key) {
+  if (!data?.key) {
     return <Navigate to="/" replace />;
   }
 
@@ -39,29 +39,31 @@ export default function Success() {
       <BreadcrumbBack link="/" text="К покупкам" className="" />
       <section className="h-full w-full flex items-center justify-center">
         <div className="flex flex-col justify-center">
-          {data.title && (
-            <h1 className="font-bold text-2xl text-center">{data.title}</h1>
+          {data?.title && (
+            <h1 className="font-bold text-2xl text-center">{data?.title}</h1>
           )}
-          {data.text && (
-            <p className="font-light mt-3 text-base text-center">{data.text}</p>
+          {data?.text && (
+            <p className="font-light mt-3 text-base text-center">
+              {data?.text}
+            </p>
           )}
-          {data.key && (
+          {data?.key && (
             <div
               onClick={handleCopyClick}
               className="flex font-bold text-xl flex-nowrap justify-center items-center mt-12 cursor-pointer select-none"
             >
-              {data.key}
+              {data?.key}
               <CopyIcon className="ml-3" />
             </div>
           )}
-          {data.activate_button_link && (
+          {data?.activate_button_link && (
             <a
-              href={data.activate_button_link}
+              href={data?.activate_button_link}
               className="flex justify-center"
               target="_blank"
             >
               <button className="btn btn-md btn-primary mt-12 w-full sm:w-auto">
-                {data.activate_button_text || "Активировать ключ"}
+                {data?.activate_button_text || "Активировать ключ"}
               </button>
             </a>
           )}

@@ -12,13 +12,13 @@ declare const window: {
 } & Window;
 
 export default function Success() {
-  const [data, setData] = useState<FailData>(window.__INITIAL_DATA__);
+  const [data, setData] = useState<FailData>({});
 
   useEffect(() => {
     setData(window.__INITIAL_DATA__);
   }, []);
 
-  if (!data.title) {
+  if (!data?.title) {
     return <Navigate to="/" replace/>;
   }
 
@@ -33,11 +33,11 @@ export default function Success() {
       <BreadcrumbBack link="/" text="К покупкам" className="" />
       <section className="h-full w-full flex items-center justify-center">
         <div className="flex flex-col justify-center">
-          {data.title && (
-            <h1 className="font-bold text-2xl text-center">{data.title}</h1>
+          {data?.title && (
+            <h1 className="font-bold text-2xl text-center">{data?.title}</h1>
           )}
-          {data.text && (
-            <p className="font-light mt-3 text-base text-center">{data.text}</p>
+          {data?.text && (
+            <p className="font-light mt-3 text-base text-center">{data?.text}</p>
           )}
           <a
             href={data?.support_button}

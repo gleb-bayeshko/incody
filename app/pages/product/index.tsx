@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Route } from "../home/+types";
-import { productData } from "~/utils/mock/productData";
-import type { Offer, Product, ProductData } from "./types";
+import type { Product, ProductData } from "./types";
 import getImageUrl from "~/utils/helpers/getImageUrl";
 import Wrapper from "~/components/ui/Wrapper";
-import ArrowLeft from "~/components/icons/ArrorLeft";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Rating from "~/components/ui/Rating";
 import createWordPluralizer from "~/utils/helpers/createWordPluralizer";
 import Offers from "~/components/widgets/Offers/Offers";
@@ -15,7 +12,7 @@ import ReviewsModal from "~/components/modals/ReviewsModal";
 import BreadcrumbBack from "~/components/ui/BreadcrumbBack";
 import { useQuery } from "@tanstack/react-query";
 import productApi from "~/api/productApi";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 declare const window: {
@@ -27,7 +24,7 @@ type Inputs = {
 };
 
 export default function Product() {
-  const [data, setData] = useState<ProductData>(window.__INITIAL_DATA__);
+  const [data, setData] = useState<ProductData>({});
   const [currentOfferId, setCurrentOfferId] = useState<number | undefined>(
     data?.offers?.[0]?.id
   );
@@ -37,11 +34,11 @@ export default function Product() {
   const navigate = useNavigate();
 
   const { data: reviewsData } = useQuery({
-    queryKey: ["productsReviews", data.product?.short_name],
+    queryKey: ["productsReviews", data?.product?.short_name],
     queryFn: () => {
-      return productApi.getProductsReviews(data.product?.short_name || "");
+      return productApi.getProductsReviews(data?.product?.short_name || "");
     },
-    enabled: !!data.product?.short_name,
+    enabled: !!data?.product?.short_name,
   });
 
   const {
@@ -75,7 +72,7 @@ export default function Product() {
     if (!currentOfferId) return;
 
     await productApi
-      .postProductTransaction(data.emailForProductBuy, currentOfferId)
+      .postProductTransaction(data?.emailForProductBuy, currentOfferId)
       .catch(() => {
         toast.error("Произошла ошибка");
       })
@@ -83,28 +80,28 @@ export default function Product() {
         setIsFormLoading(false);
       });
 
-      navigate('/merchant')
+    navigate("/merchant");
   };
 
   useEffect(() => {
     setData(window.__INITIAL_DATA__);
-    setCurrentOfferId(window.__INITIAL_DATA__.offers?.[0]?.id);
+    setCurrentOfferId(window.__INITIAL_DATA__?.offers?.[0]?.id);
   }, []);
 
   return (
     <Wrapper>
       <Meta
-        title={`Купить ${data.product?.title}`}
-        description={`${data.product?.description}`}
-        ogTitle={`Купить ${data.product?.title}`}
-        ogDescription={`${data.product?.description}`}
-        ogImageUrl={`${getImageUrl(data.product?.image)}`}
+        title={`Купить ${data?.product?.title}`}
+        description={`${data?.product?.description}`}
+        ogTitle={`Купить ${data?.product?.title}`}
+        ogDescription={`${data?.product?.description}`}
+        ogImageUrl={`${getImageUrl(data?.product?.image)}`}
       />
       <BreadcrumbBack link="/" text="На главную" className="mb-6" />
       <section className="flex gap-x-6">
         <div className="w-[264px] hidden md:block">
           <img
-            src={getImageUrl(data.product?.image)}
+            src={getImageUrl(data?.product?.image)}
             className="aspect-square object-cover object-center rounded-xl w-full"
           />
         </div>
@@ -112,7 +109,7 @@ export default function Product() {
           <div className="flex gap-x-6 lg:gap-x-0">
             <div className="max-w-[104px] lg:max-w-[264px] lg:w-[264px] block md:hidden">
               <img
-                src={getImageUrl(data.product?.image)}
+                src={getImageUrl(data?.product?.image)}
                 className="aspect-square object-cover object-center rounded-xl w-full"
               />
             </div>
@@ -123,8 +120,10 @@ export default function Product() {
               >
                 <Rating rating={data?.product?.rating} />
                 <span className="block text-nowrap ml-3 text-primary font-light text-base">{`${
-                  data.product?.rating_amount
-                } ${ratingPluralizer(data.product?.rating_amount || 0)}`}</span>
+                  data?.product?.rating_amount
+                } ${ratingPluralizer(
+                  data?.product?.rating_amount || 0
+                )}`}</span>
               </div>
               <h1 className="mt-3 font-bold text-xl lg:text-2xl">
                 {data?.product?.title}
@@ -134,10 +133,10 @@ export default function Product() {
           <div className="grid xl:grid-cols-[692px_auto] gap-x-0 mt-6">
             <form className="xl:pr-6" onSubmit={handleSubmit(handleFormSubmit)}>
               <p className="font-light text-base">
-                {data.product?.description}
+                {data?.product?.description}
               </p>
               <Offers
-                offers={data.offers || []}
+                offers={data?.offers || []}
                 selectedOfferId={currentOfferId}
                 className="mt-6 lg:mt-3"
                 onChange={handleOfferChange}
@@ -162,13 +161,13 @@ export default function Product() {
                 disabled={isFormLoading}
                 className="btn btn-md btn-primary w-full mt-3"
               >{`Купить навсегда за ${
-                data.offers?.find(({ id }) => id === currentOfferId)?.price
+                data?.offers?.find(({ id }) => id === currentOfferId)?.price
               }  ₽`}</button>
             </form>
             <div className="border-t-[1px] pt-6 mt-6 xl:mt-0 xl:border-t-0 xl:pt-0 xl:pl-6 xl:border-l-[1px] border-gray">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: getInstructionHtml(data.product?.instruction),
+                  __html: getInstructionHtml(data?.product?.instruction),
                 }}
                 className="[&>div:not(:first-child)]:mt-6 [&_p]:font-light [&_p]:text-base"
               />
@@ -181,7 +180,7 @@ export default function Product() {
         isOpen={isModalOpen}
         id="product-reviews-modal"
         onClose={handleReviewsModalClose}
-        shortName={data.product?.short_name}
+        shortName={data?.product?.short_name}
         reviewsData={reviewsData || []}
       />
     </Wrapper>
@@ -189,7 +188,7 @@ export default function Product() {
 }
 
 function getLD(data: ProductData) {
-  const product = data.product;
+  const product = data?.product;
 
   return {
     "@context": "https://schema.org",
