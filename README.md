@@ -9,21 +9,16 @@
 npm install
 ```
 
-### Сборка и запуск билда
+### Запуск dev версии
 
 ```bash
-npm run build
-npm run start
+npm run dev
 ```
 
 Приложение запустится на `http://localhost:5173`.
 
-### Docker Deployment
-
-Сборка и запуск, используя Docker:
+### Сборка билда
 
 ```bash
-# For npm
-docker build -t my-app .
-docker run -p 3000:3000 my-app
+npm run build
 ```
