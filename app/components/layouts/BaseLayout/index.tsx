@@ -10,7 +10,7 @@ import { successData } from "~/utils/mock/successData";
 
 function BaseLayout() {
   const location = useLocation();
-  const isDev = import.meta.env.MODE === "development";
+  const isDev = import.meta.env.VITE_INITIAL_DATA_MOCK === "true";
 
   useEffect(() => {
     if (isDev) {
