@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Product, ProductData } from "./types";
 import getImageUrl from "~/utils/helpers/getImageUrl";
 import Wrapper from "~/components/ui/Wrapper";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Rating from "~/components/ui/Rating";
 import createWordPluralizer from "~/utils/helpers/createWordPluralizer";
 import Offers from "~/components/widgets/Offers/Offers";
@@ -14,17 +14,21 @@ import { useQuery } from "@tanstack/react-query";
 import productApi from "~/api/productApi";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
-declare const window: {
-  __INITIAL_DATA__: ProductData;
-} & Window;
+import type { Route } from "./+types";
 
 type Inputs = {
   emailForProductBuy: string;
 };
 
-export default function Product() {
-  const [data, setData] = useState<ProductData>({});
+export default function Product({ params }: Route.ComponentProps) {
+  const { data, isPending, isSuccess } = useQuery({
+    queryKey: ["productCardData", params.shortName],
+    queryFn: async () => {
+      return productApi.getProductCardData(params?.shortName || "");
+    },
+    enabled: !!params.shortName,
+  });
+
   const [currentOfferId, setCurrentOfferId] = useState<number | undefined>(
     data?.offers?.[0]?.id
   );
@@ -84,9 +88,10 @@ export default function Product() {
   };
 
   useEffect(() => {
-    setData(window.__INITIAL_DATA__);
-    setCurrentOfferId(window.__INITIAL_DATA__?.offers?.[0]?.id);
-  }, []);
+    if (isSuccess) {
+      setCurrentOfferId(data?.offers?.[0]?.id);
+    }
+  }, [isPending, isSuccess, data]);
 
   return (
     <Wrapper>
@@ -160,9 +165,7 @@ export default function Product() {
               <button
                 disabled={isFormLoading}
                 className="btn btn-md btn-primary w-full mt-3"
-              >{`Купить навсегда за ${
-                data?.offers?.find(({ id }) => id === currentOfferId)?.price
-              }  ₽`}</button>
+              >{`Купить`}</button>
             </form>
             <div className="border-t-[1px] pt-6 mt-6 xl:mt-0 xl:border-t-0 xl:pt-0 xl:pl-6 xl:border-l-[1px] border-gray">
               <div
@@ -175,7 +178,9 @@ export default function Product() {
           </div>
         </div>
       </section>
-      <script type="application/ld+json">{JSON.stringify(getLD(data))}</script>
+      <script type="application/ld+json">
+        {JSON.stringify(getLD(data || {}))}
+      </script>
       <ReviewsModal
         isOpen={isModalOpen}
         id="product-reviews-modal"

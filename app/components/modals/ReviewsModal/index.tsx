@@ -75,6 +75,9 @@ function ReviewsModal({
             </div>
           </div>
           <div className="pt-6 [&>div:not(:first-child)]:mt-6 scrollbar max-h-[670px] sm:max-h-[500px] h-full overflow-y-auto">
+            {reviewsData?.length === 0 && (
+              <div>У этого товара пока еще нет отзывов.</div>
+            )}
             {reviewsData.map(({ id, rating, name, text }) => (
               <div key={id}>
                 <Rating rating={rating} />

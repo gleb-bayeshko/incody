@@ -10,7 +10,8 @@ export interface Offer {
   price?: number;
   currency?: string;
   bage_text?: string;
-  bage_text_2?: string;
+  bage_text_color?: string;
+  bage_color?: string;
 }
 
 export interface Product {

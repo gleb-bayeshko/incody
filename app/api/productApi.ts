@@ -1,12 +1,18 @@
 import type { Product } from "~/pages/home/types";
 import apiInstance, { type ResponseWithMessage } from ".";
-import type { ProductReview } from "~/pages/product/types";
+import type { ProductData, ProductReview } from "~/pages/product/types";
+import type { FailData } from "~/pages/fail/type";
+import type { SuccessData } from "~/pages/success/type";
 
 interface ProductApiInstance {
   getProductsMore(): Promise<Product[]>;
   getProductsByCategoryId(categoryId: number): Promise<Product[]>;
   getProductsBySearchQuery(query: string): Promise<Product[]>;
   getProductsReviews(shortName: string): Promise<ProductReview[]>;
+  getProductCardData(shortName: string): Promise<ProductData>;
+  getTransactionFailInfo(): Promise<FailData>;
+  getTransactionSuccessInfo(token: string): Promise<SuccessData>;
+
   postProductReview(
     shortName: string,
     rating: number,
@@ -37,6 +43,23 @@ class ProductApi implements ProductApiInstance {
   async getProductsReviews(shortName: string): Promise<ProductReview[]> {
     const { data } = await apiInstance.get(`/reviews?short_name=${shortName}`);
     return data as ProductReview[];
+  }
+
+  async getProductCardData(shortName: string): Promise<ProductData> {
+    console.log(shortName);
+    const { data } = await apiInstance.get(`/product?short_name=${shortName}`);
+
+    return data as ProductData;
+  }
+
+  async getTransactionFailInfo(): Promise<FailData> {
+    const { data } = await apiInstance.get(`/pay/fail`);
+    return data as FailData;
+  }
+
+  async getTransactionSuccessInfo(token: string): Promise<SuccessData> {
+    const { data } = await apiInstance.get(`/pay/success?token=${token}`);
+    return data as SuccessData;
   }
 
   async postProductReview(

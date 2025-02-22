@@ -32,7 +32,11 @@ function Offers({ offers, onChange, selectedOfferId, className }: OffersProps) {
       )}
     >
       {offers.map(
-        ({ id, bage_text, bage_text_2, currency, name, price }, i, arr) => (
+        (
+          { id, bage_text, bage_color, bage_text_color, currency, name, price },
+          i,
+          arr
+        ) => (
           <button
             key={id}
             className={classNames(
@@ -62,20 +66,18 @@ function Offers({ offers, onChange, selectedOfferId, className }: OffersProps) {
                 className={classNames("duration-100", {
                   "ml-3": currentOfferId === id,
                 })}
-              >{`${name}, ${price} ₽`}</div>
+              >{`${name}, ${price} ${currency}`}</div>
             </div>
-            <div
-              className={classNames(
-                "relative text-nowrap lg:absolute lg:top-[-13px] lg:left-2/4 lg:translate-x-[-50%] font-light text-base rounded-3xl h-6 px-3 flex items-center",
-                {
-                  "text-white bg-base-content": i === 0,
-                  "bg-orange": i === arr.length - 1,
-                  "bg-gray": i !== 0 && i !== arr.length - 1,
-                }
-              )}
-            >
-              {`${bage_text || "Только сегодня"}`}
-            </div>
+            {bage_text && (
+              <div
+                className={classNames(
+                  "relative text-nowrap lg:absolute lg:top-[-13px] lg:left-2/4 lg:translate-x-[-50%] font-light text-base rounded-3xl h-6 px-3 flex items-center"
+                )}
+                style={{ color: bage_text_color, backgroundColor: bage_color }}
+              >
+                {`${bage_text}`}
+              </div>
+            )}
           </button>
         )
       )}
