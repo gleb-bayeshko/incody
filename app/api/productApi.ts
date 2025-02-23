@@ -46,7 +46,6 @@ class ProductApi implements ProductApiInstance {
   }
 
   async getProductCardData(shortName: string): Promise<ProductData> {
-    console.log(shortName);
     const { data } = await apiInstance.get(`/product?short_name=${shortName}`);
 
     return data as ProductData;

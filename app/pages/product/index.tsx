@@ -21,10 +21,21 @@ type Inputs = {
 };
 
 export default function Product({ params }: Route.ComponentProps) {
+  const navigate = useNavigate();
+
   const { data, isPending, isSuccess } = useQuery({
     queryKey: ["productCardData", params.shortName],
     queryFn: async () => {
-      return productApi.getProductCardData(params?.shortName || "");
+      return productApi
+        .getProductCardData(params?.shortName || "")
+        .catch((e) => {
+          if (e.status === 404) {
+            navigate("/404");
+          } else {
+            toast.error("Произошла ошибка");
+          }
+          return e;
+        });
     },
     enabled: !!params.shortName,
   });
@@ -34,8 +45,6 @@ export default function Product({ params }: Route.ComponentProps) {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const { data: reviewsData } = useQuery({
     queryKey: ["productsReviews", data?.product?.short_name],
@@ -77,14 +86,14 @@ export default function Product({ params }: Route.ComponentProps) {
 
     await productApi
       .postProductTransaction(data?.emailForProductBuy, currentOfferId)
-      .catch(() => {
+      .catch((e) => {
         toast.error("Произошла ошибка");
       })
       .finally(() => {
         setIsFormLoading(false);
       });
 
-    navigate("/merchant");
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/merchant`;
   };
 
   useEffect(() => {

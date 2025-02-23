@@ -92,14 +92,14 @@ function Footer() {
           <div className="flex flex-col sm:flex-row xl:flex-col 2xl:flex-row 2xl:items-center gap-x-5">
             <a
               className="font-light text-base text-gray-accent text-nowrap sm:text-end hover:underline"
-              href="/oferta"
+              href={`${import.meta.env.VITE_API_BASE_URL}/oferta`}
               target="_blank"
             >
               Пользовательское соглашение
             </a>
             <a
               className="font-light text-base text-gray-accent text-nowrap sm:text-end hover:underline"
-              href="/policy"
+              href={`${import.meta.env.VITE_API_BASE_URL}/policy`}
               target="_blank"
             >
               Политика конфиденциальности
